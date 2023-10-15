@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-    FlatList,
-    Image,
-    Text,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-    Modal,
-    Button,
-} from "react-native";
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Modal,
+  Pressable,
+} from 'react-native';
 
 // Dummmy Data (Array of Object)
 const datas = [
@@ -80,81 +80,112 @@ const datas = [
     },
 ];
 
-// Functional Component
 const List = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-    const renderItem = ({ item }) => {
-        return (
-            <TouchableOpacity
-                style={styles.view}
-                onPress={() => {
-                    setModalVisible(true);
-                    setSelectedItem(item);
-                }}
-            >
-                <View>
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                    <Text style={styles.text}>{item.title}</Text>
-                </View>
-            </TouchableOpacity>
-        );
-    };
-
+  const renderItem = ({ item }) => {
     return (
+      <TouchableOpacity
+        style={styles.view}
+        onPress={() => {
+          setSelectedItem(item);
+          setModalVisible(true);
+        }}>
         <View>
-            <FlatList
-                data={datas}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-            />
-
-            {selectedItem && (
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={modalVisible}
-                >
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalText}>{selectedItem.title}</Text>
-                        <Image source={{ uri: selectedItem.image }} style={styles.modalImage} />
-                        <Button title="Close Modal" onPress={() => setModalVisible(false)} />
-                    </View>
-                </Modal>
-            )}
+          <Image source={{ uri: item.image }} style={styles.image} />
+          <Text style={styles.text}>{item.title}</Text>
         </View>
+      </TouchableOpacity>
     );
+  };
+
+  return (
+    <View>
+      <FlatList
+        data={datas}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+      {selectedItem && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{selectedItem.title}</Text>
+              <Image source={{ uri: selectedItem.image }} style={styles.modalImage} />
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.textStyle}>Close Modal</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      )}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    view: {
-        padding: 15,
-        borderBottomColor: "#dddddd",
-        borderBottomWidth: 1,
+  view: {
+    padding: 15,
+    borderBottomColor: '#dddddd',
+    borderBottomWidth: 1,
+  },
+  image: {
+    height: 200,
+    width: null,
+  },
+  text: {
+    fontSize: 18,
+    paddingTop: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.6)", 
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    image: {
-        height: 200,
-        width: null,
-    },
-    text: {
-        fontSize: 18,
-        paddingTop: 10,
-    },
-    modalContainer: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    modalText: {
-        fontSize: 24,
-        marginBottom: 20,
-    },
-    modalImage: {
-        width: 300,
-        height: 300,
-        marginBottom: 20
-    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    marginTop:25,
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalImage: {
+    height: 200,
+    width: 200,
+  },
 });
 
 export default List;
