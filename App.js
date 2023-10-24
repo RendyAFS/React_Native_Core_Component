@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
-import { View, DrawerLayoutAndroid, StatusBar } from "react-native";
+import { DrawerLayoutAndroid, StatusBar } from "react-native";
 import Header from "./components/header";
 import Button from "./components/button";
 import Separator from "./components/separator";
 import List from "./screens/list";
 import Article from "./screens/article";
+import { config } from "@gluestack-ui/config";
+import { GluestackUIProvider, View } from "@gluestack-ui/themed";
 
 // Functional Component
 const App = () => {
@@ -24,13 +26,15 @@ const App = () => {
 
   // Arrow Function inside Functional Component
   const navigationView = () => (
-    <View style={{ padding: 30, backgroundColor: "#222222", flex: 1 }}>
-      <Button text="List" onPress={() => changePage(drawer, "list")} />
-      <Separator height={30} />
-      <Button text="Article" onPress={() => changePage(drawer, "article")} />
-      <Separator height={30} />
-      <Button text="Close" onPress={() => drawer.current.closeDrawer()} />
-    </View>
+    <GluestackUIProvider config={config}>
+      <View padding={30} backgroundColor="#222222" flex={1}>
+        <Button text="List" onPress={() => changePage(drawer, "list")} />
+        <Separator height={30} />
+        <Button text="Article" onPress={() => changePage(drawer, "article")} />
+        <Separator height={30} />
+        <Button text="Close" onPress={() => drawer.current.closeDrawer()} />
+      </View>
+    </GluestackUIProvider>
   );
 
   return (
